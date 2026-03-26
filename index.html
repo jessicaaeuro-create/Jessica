@@ -2,56 +2,103 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Jéssica Santos | Faturamento Médico</title>
+<title>MIFATURE</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <style>
-body {font-family: Arial; margin:0; background:#f4f6f9;}
-header {background:#0a2540; color:white; padding:40px; text-align:center;}
-section {padding:40px;}
-.card {background:white; padding:20px; margin:20px 0; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-button {background:#007bff; color:white; padding:12px 20px; border:none; border-radius:5px; cursor:pointer;}
-h2 {color:#0a2540;}
+body{
+ font-family:Arial;
+ background:#02140f;
+ color:white;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ height:100vh;
+}
+.card{
+ background:#0a2e22;
+ padding:30px;
+ border-radius:10px;
+ width:300px;
+}
+input,button{
+ width:100%;
+ padding:10px;
+ margin:10px 0;
+}
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>Jéssica Santos</h1>
-<p>Inteligência em faturamento médico</p>
-<button onclick="window.location.href='https://wa.me/5592000000000'">Fale no WhatsApp</button>
-</header>
-
-<section>
-<h2>Sobre</h2>
-<div class="card">
-<p>Especialista em faturamento médico para clínicas e profissionais da saúde. Atuação focada em redução de glosas, organização financeira e aumento de receita.</p>
-<p><strong>Importante:</strong> Serviço exclusivo de faturamento e gestão administrativa. Não realizamos atendimento clínico.</p>
+<div id="login" class="card">
+<h2>🌿 MIFATURE</h2>
+<input id="email" placeholder="Email">
+<input id="senha" type="password" placeholder="Senha">
+<button onclick="login()">Entrar</button>
+<button onclick="cadastrar()">Criar conta</button>
 </div>
-</section>
 
-<section>
-<h2>Serviços</h2>
-<div class="card">✔ Faturamento médico completo</div>
-<div class="card">✔ Envio de guias (SADT, consultas e terapias)</div>
-<div class="card">✔ Recursos de glosas</div>
-<div class="card">✔ Controle de produção clínica</div>
-<div class="card">✔ Integração com convênios (GEAP, Bradesco e outros)</div>
-</section>
-
-<section>
-<h2>Diferenciais</h2>
-<div class="card">✔ Atendimento rápido e personalizado</div>
-<div class="card">✔ Experiência com clínicas multidisciplinares</div>
-<div class="card">✔ Aumento real de faturamento</div>
-</section>
-
-<section>
-<h2>Contato</h2>
-<div class="card">
-<p>WhatsApp: (92) 00000-0000</p>
-<p>Email: contato@jessicasantos.com</p>
+<div id="app" class="card" style="display:none;">
+<h2>👑 Sistema</h2>
+<p>Logado com sucesso</p>
+<button onclick="logout()">Sair</button>
 </div>
-</section>
+
+<script>
+const supabase = supabase.createClient(
+  "https://majvmfbdqwjlcizsohwc.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hanZtZmJkcXdqbGNpenNvaHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4MTUzOTksImV4cCI6MjA4MzM5MTM5OX0.T3hUmHOrjHJ27hkqxpxp3Ow5Wz1Tame7gGwJkKDq66g"
+);
+
+// LOGIN
+async function login(){
+ const email = document.getElementById('email').value;
+ const senha = document.getElementById('senha').value;
+
+ const { error } = await supabase.auth.signInWithPassword({
+   email,
+   password: senha
+ });
+
+ if(error){
+   alert(error.message);
+ }else{
+   alert("Entrou!");
+   mostrarApp();
+ }
+}
+
+// CADASTRO
+async function cadastrar(){
+ const email = document.getElementById('email').value;
+ const senha = document.getElementById('senha').value;
+
+ const { error } = await supabase.auth.signUp({
+   email,
+   password: senha
+ });
+
+ if(error){
+   alert(error.message);
+ }else{
+   alert("Conta criada!");
+ }
+}
+
+// LOGOUT
+async function logout(){
+ await supabase.auth.signOut();
+ location.reload();
+}
+
+// MOSTRAR APP
+function mostrarApp(){
+ document.getElementById('login').style.display = 'none';
+ document.getElementById('app').style.display = 'block';
+}
+</script>
 
 </body>
 </html>
